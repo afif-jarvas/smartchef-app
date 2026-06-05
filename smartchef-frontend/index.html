@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI Smart Chef · 智廚坊</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Noto+Serif+SC:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300;1,500&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* ── Back button in navbar ── */
+      #btn-nav-back {
+        display: none;
+        align-items: center;
+        gap: 7px;
+        background: rgba(249, 242, 231, 0.06);
+        border: 1px solid rgba(201, 151, 58, 0.3);
+        border-radius: 8px;
+        color: rgba(249, 242, 231, 0.75);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 500;
+        padding: 7px 14px 7px 10px;
+        cursor: pointer;
+        transition: all 0.22s;
+        letter-spacing: 0.02em;
+        flex-shrink: 0;
+      }
+      #btn-nav-back:hover {
+        background: rgba(249, 242, 231, 0.12);
+        border-color: rgba(201, 151, 58, 0.6);
+        color: #f0c060;
+        transform: translateX(-2px);
+        box-shadow: none;
+      }
+      #btn-nav-back .back-arrow {
+        font-size: 1rem;
+        line-height: 1;
+        color: #c9973a;
+      }
+      #btn-nav-back.visible {
+        display: inline-flex;
+      }
+      /* Group brand + back button on the left */
+      .nav-left-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      /* ── Footer global fix ── */
+      footer {
+        position: relative;
+        z-index: 5;
+        text-align: center;
+        background: linear-gradient(
+          180deg,
+          transparent,
+          rgba(181, 0, 31, 0.05)
+        );
+        border-top: 1px solid rgba(201, 151, 58, 0.22);
+      }
+      .footer-bottom {
+        padding: 28px 28px 22px;
+      }
+      footer .footer-ornament {
+        font-size: 0.9rem;
+        color: #c9973a;
+        letter-spacing: 0.5em;
+        margin-bottom: 8px;
+      }
+      footer .footer-saying {
+        font-family: "Noto Serif SC", serif;
+        font-size: 0.86rem;
+        color: #b5001f;
+        letter-spacing: 0.07em;
+        margin-bottom: 6px;
+      }
+      footer p {
+        font-size: 0.68rem;
+        color: rgba(249, 242, 231, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Decorative -->
+    <canvas id="fireworks-canvas"></canvas>
+    <div class="floating-lantern lantern-1">🏮</div>
+    <div class="floating-lantern lantern-2">🏮</div>
+    <div class="floating-lantern lantern-3">🏮</div>
+    <div class="floating-lantern lantern-4">🏮</div>
+
+    <!-- ══════════════════════════════════════════
+       NAVBAR
+    ══════════════════════════════════════════ -->
+    <nav id="navbar">
+      <div class="nav-inner">
+        <div class="nav-left-group">
+          <button class="nav-brand" data-page="home">
+            <span class="nb-cjk">智廚坊</span>
+            <span class="nb-sep">·</span>
+            <span class="nb-en">AI SMART CHEF</span>
+          </button>
+
+          <!-- Back button (shown on non-home pages, sits right next to brand) -->
+          <button id="btn-nav-back" aria-label="Kembali">
+            <span class="back-arrow">‹</span>
+            <span>Kembali</span>
+          </button>
+        </div>
+
+        <!-- Desktop links -->
+        <div class="nav-links">
+          <button class="nav-link active" data-page="home">
+            <span class="nl-cjk">首</span>
+            <span class="nl-en">Beranda</span>
+          </button>
+          <button class="nav-link" data-page="about">
+            <span class="nl-cjk">關</span>
+            <span class="nl-en">Tentang</span>
+          </button>
+          <button class="nav-link nav-cta" data-page="chef">
+            <span class="nl-cjk">廚</span>
+            <span class="nl-en">Mulai Masak</span>
+          </button>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobile-menu">
+      <button class="mm-link" data-page="home">
+        <span class="mm-cjk">首</span> Beranda
+      </button>
+      <button class="mm-link" data-page="about">
+        <span class="mm-cjk">關</span> Tentang &amp; Tim
+      </button>
+      <button class="mm-link mm-cta" data-page="chef">
+        <span class="mm-cjk">廚</span> Mulai Masak Sekarang
+      </button>
+    </div>
+
+    <!-- Frame bars (always visible) -->
+    <div class="frame-bar top-bar">
+      <span>✦</span><span>龍</span><span>✦</span><span>鳳</span><span>✦</span>
+      <span>龍</span><span>✦</span><span>鳳</span><span>✦</span><span>龍</span>
+      <span>✦</span><span>鳳</span><span>✦</span>
+    </div>
+    <div class="dragon-banner">
+      <span></span><span>—</span><span>智廚坊</span><span>·</span>
+      <span>民以食為天</span><span>·</span><span>Ai Smart Chef</span>
+      <span>—</span><span></span>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+       PAGES WRAPPER
+    ══════════════════════════════════════════ -->
+    <div id="pages-wrapper">
+      <!-- ─── PAGE: HOME ─── -->
+      <div class="page page-active" id="page-home">
+        <!-- Hero -->
+        <section class="hero">
+          <div class="hero-bg-char">食</div>
+          <div class="hero-side-deco hero-left">龍</div>
+          <div class="hero-side-deco hero-right">鳳</div>
+
+          <div class="hero-content">
+            <div class="hero-eyebrow">智 · 廚 · 坊</div>
+            <h1>AI Smart <span>Chef</span></h1>
+            <p class="hero-tagline">
+              Foto bahan yang ada, dapatkan rekomendasi resep instan dari AI
+              —<br />
+              didukung Cloud Vision &amp; Gemini.
+            </p>
+            <div class="hero-tags">
+              <span>☁️ Cloud Vision API</span>
+              <span>🤖 Gemini AI</span>
+              <span>♻️ Zero Food Waste</span>
+              <span>⚡ Resep Instan</span>
+            </div>
+            <div class="hero-actions">
+              <button class="btn-hero-primary" data-page="chef">
+                🍳 &nbsp;Mulai Sekarang
+              </button>
+              <button class="btn-hero-secondary" data-page="about">
+                Tentang Proyek →
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-stats">
+            <div class="hs-item">
+              <div class="hs-num">3</div>
+              <div class="hs-label">Langkah Mudah</div>
+            </div>
+            <div class="hs-sep">·</div>
+            <div class="hs-item">
+              <div class="hs-num">AI</div>
+              <div class="hs-label">Deteksi Bahan</div>
+            </div>
+            <div class="hs-sep">·</div>
+            <div class="hs-item">
+              <div class="hs-num">∞</div>
+              <div class="hs-label">Kombinasi Resep</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Features strip -->
+        <section class="features-section">
+          <div class="features-eyebrow">功 能 特 色</div>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="fc-step-num">一 · Langkah 1</div>
+              <span class="fc-emoji">📸</span>
+              <div class="fc-title">Upload atau Foto</div>
+              <p>Ambil foto isi kulkas atau seret gambar bahan makananmu.</p>
+            </div>
+            <div class="feature-card">
+              <div class="fc-step-num">二 · Langkah 2</div>
+              <span class="fc-emoji">🤖</span>
+              <div class="fc-title">AI Deteksi Otomatis</div>
+              <p>Cloud Vision API mengenali bahan makanan secara instan.</p>
+            </div>
+            <div class="feature-card">
+              <div class="fc-step-num">三 · Langkah 3</div>
+              <span class="fc-emoji">✏️</span>
+              <div class="fc-title">Konfirmasi Bahan</div>
+              <p>Edit, hapus, atau tambah bahan sebelum resep dibuat.</p>
+            </div>
+            <div class="feature-card">
+              <div class="fc-step-num">四 · Langkah 4</div>
+              <span class="fc-emoji">🍜</span>
+              <div class="fc-title">Resep dari Gemini</div>
+              <p>Gemini AI meracik resep lengkap dari bahan yang kamu punya.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quote banner -->
+        <div class="quote-banner">
+          <div class="qb-inner">
+            <span class="qb-cjk">民以食為天</span>
+            <span class="qb-sep">·</span>
+            <span class="qb-latin">"Bagi rakyat, makanan adalah langit."</span>
+          </div>
+        </div>
+      </div>
+      <!-- /page-home -->
+
+      <!-- ─── PAGE: ABOUT ─── -->
+      <div class="page" id="page-about">
+        <div class="page-header">
+          <div class="ph-eyebrow">關 於 我 們</div>
+          <h2>Tentang &amp; Tim</h2>
+          <p>Filosofi, latar belakang, dan para pengembang di balik 智廚坊</p>
+        </div>
+
+        <div class="about-wrapper">
+          <!-- About + Tim -->
+          <div class="split-section reveal-on-scroll">
+            <div class="split-left">
+              <div class="sec-label">
+                <div class="sec-num">壹</div>
+                <div class="sec-title">Latar Belakang</div>
+              </div>
+              <p class="about-text">
+                AI Smart Chef lahir dari satu misi sederhana, membantu siapa
+                saja memasak lebih bijak dari bahan yang sudah ada. Didukung
+                <strong>Cloud Vision API</strong> untuk mendeteksi bahan dari
+                foto dan <strong>Gemini AI</strong> untuk meracik resep instan,
+                aplikasi ini meminimalisir pemborosan bahan makanan setiap hari.
+              </p>
+              <div class="funfact-box">
+                <div class="funfact-icon">🐉</div>
+                <div class="funfact-content">
+                  <div class="funfact-label">趣事 · Fun Fact</div>
+                  <p>
+                    Nuansa Chinese pada AI Smart Chef bukan kebetulan, sang
+                    pengembang adalah pecinta sejati budaya Tionghoa. Filosofi
+                    kuno dapur Tiongkok berbunyi <em>「民以食為天」</em>
+                    <em>"Bagi rakyat, makanan adalah langit."</em>
+                    Itulah jiwa dari setiap baris kode di sini.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="split-right">
+              <div class="sec-label">
+                <div class="sec-num">✦</div>
+                <div class="sec-title">Tim Pengembang</div>
+              </div>
+              <div class="authors-stack">
+                <div class="author-card">
+                  <div class="profile-frame">
+                    <img
+                      src="foto afif.jpeg"
+                      alt="Ananda Afif Fauzan"
+                      class="profile-img"
+                      onerror="
+                        this.src =
+                          'https://placehold.co/68x68/1a1208/c9973a?text=A'
+                      "
+                    />
+                  </div>
+                  <div class="author-info">
+                    <h4>Ananda Afif Fauzan</h4>
+                    <p class="author-role">Fullstack Engineer</p>
+                  </div>
+                </div>
+                <div class="author-card">
+                  <div class="profile-frame">
+                    <img
+                      src="foto lintang.png"
+                      alt="Lintang Dyahayuningsih"
+                      class="profile-img"
+                      onerror="
+                        this.src =
+                          'https://placehold.co/68x68/1a1208/c9973a?text=L'
+                      "
+                    />
+                  </div>
+                  <div class="author-info">
+                    <h4>Lintang Dyahayuningsih</h4>
+                    <p class="author-role">Advisor / Consultant</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cara kerja -->
+          <div class="full-section reveal-on-scroll">
+            <div class="full-inner">
+              <div class="sec-label" style="margin-bottom: 28px">
+                <div class="sec-num">貳</div>
+                <div class="sec-title">Cara Kerja Smart Chef</div>
+              </div>
+              <div class="howto-grid">
+                <div class="howto-step">
+                  <div class="howto-arrow">›</div>
+                  <div class="howto-num">一</div>
+                  <div class="howto-emoji">📸</div>
+                  <div class="howto-title">Upload / Foto Bahan</div>
+                  <div class="howto-desc">
+                    Seret foto atau ambil langsung dari kamera. Isi kulkas, meja
+                    dapur, tumpukan bahan seadanya, semua bisa!
+                  </div>
+                </div>
+                <div class="howto-step">
+                  <div class="howto-arrow">›</div>
+                  <div class="howto-num">二</div>
+                  <div class="howto-emoji">🤖</div>
+                  <div class="howto-title">AI Deteksi Bahan</div>
+                  <div class="howto-desc">
+                    <strong>Cloud Vision API</strong> menganalisis foto dan
+                    mengenali semua bahan makanan secara otomatis.
+                  </div>
+                </div>
+                <div class="howto-step howto-step--active">
+                  <div class="howto-arrow">›</div>
+                  <div class="howto-num">三</div>
+                  <div class="howto-emoji">✏️</div>
+                  <div class="howto-title">Konfirmasi Bahan</div>
+                  <div class="howto-desc">
+                    Periksa hasil deteksi AI. Edit nama, ubah jumlah, hapus yang
+                    salah, atau tambah bahan yang terlewat.
+                  </div>
+                </div>
+                <div class="howto-step">
+                  <div class="howto-num">四</div>
+                  <div class="howto-emoji">🍜</div>
+                  <div class="howto-title">Dapat Resep Instan</div>
+                  <div class="howto-desc">
+                    <strong>Gemini AI</strong> meracik rekomendasi masakan
+                    lengkap, bahan, langkah, dan tips.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="about-cta reveal-on-scroll">
+            <p class="about-cta-text">Siap memasak dengan bahan yang ada?</p>
+            <button class="btn-about-cta" data-page="chef">
+              🍳 &nbsp;Coba AI Smart Chef Sekarang
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- /page-about -->
+
+      <!-- ─── PAGE: CHEF ─── -->
+      <div class="page" id="page-chef">
+        <div class="page-header">
+          <div class="ph-eyebrow">開 始 烹 飪</div>
+          <h2>Smart Chef</h2>
+          <p>Foto bahan → AI deteksi → konfirmasi → dapatkan resep</p>
+        </div>
+
+        <!-- Step indicator -->
+        <div class="chef-steps-indicator">
+          <div class="csi-step csi-active" id="csi-1">
+            <div class="csi-dot"><span>一</span></div>
+            <div class="csi-label">Upload</div>
+          </div>
+          <div class="csi-line" id="csi-line-1"></div>
+          <div class="csi-step" id="csi-2">
+            <div class="csi-dot"><span>二</span></div>
+            <div class="csi-label">Konfirmasi</div>
+          </div>
+          <div class="csi-line" id="csi-line-2"></div>
+          <div class="csi-step" id="csi-3">
+            <div class="csi-dot"><span>三</span></div>
+            <div class="csi-label">Resep</div>
+          </div>
+        </div>
+
+        <div class="chef-content-area">
+          <!-- STAGE 1: Upload + Kamera -->
+          <div class="chef-stage" id="stage-upload">
+            <div class="split-section">
+              <!-- KIRI: Upload -->
+              <div class="split-left">
+                <div class="sec-label">
+                  <div class="sec-num">參</div>
+                  <div class="sec-title">Unggah Foto Bahan</div>
+                </div>
+
+                <form id="upload-form" enctype="multipart/form-data">
+                  <label class="file-drop" for="file" id="file-drop-label">
+                    <span class="drop-lantern">🏮</span>
+                    <span class="drop-main">Klik atau seret foto ke sini</span>
+                    <span class="drop-hint">PNG · JPG · WEBP · maks 10 MB</span>
+                  </label>
+                  <input type="file" id="file" name="file" accept="image/*" />
+
+                  <div id="preview-container">
+                    <img
+                      id="preview"
+                      src=""
+                      alt="Preview"
+                      style="display: none"
+                    />
+                  </div>
+
+                  <button type="submit" id="submit-btn" class="btn-primary">
+                    🔍 &nbsp;Analisis Bahan Makanan
+                  </button>
+                </form>
+
+                <div id="loading" style="display: none">
+                  <div class="ld-wrap">
+                    <span class="ld-lantern">🏮</span>
+                    <div class="ld-title" id="loading-title">
+                      AI sedang menganalisis fotomu…
+                    </div>
+                    <div class="ld-sub">
+                      Vertex AI · Cloud Vision API · Gemini Flash
+                    </div>
+                    <div class="ld-steps">
+                      <div class="ls" id="ls1">
+                        &nbsp;Mengunggah foto ke Cloud Storage…
+                      </div>
+                      <div class="ls" id="ls2">
+                        &nbsp;Cloud Vision mendeteksi bahan makanan…
+                      </div>
+                      <div class="ls" id="ls3">
+                        &nbsp;Gemini Flash membuat resep untukmu…
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- KANAN: Kamera -->
+              <div class="split-right">
+                <div class="sec-label">
+                  <div class="sec-num">肆</div>
+                  <div class="sec-title">Ambil Foto Langsung</div>
+                </div>
+                <video
+                  id="camera"
+                  autoplay
+                  playsinline
+                  style="display: none"
+                ></video>
+                <canvas id="snapshot" style="display: none"></canvas>
+                <div id="camera-buttons">
+                  <button id="start-camera">▶ &nbsp;Mulai Kamera</button>
+                  <button id="take-picture" style="display: none">
+                    📸 &nbsp;Ambil Foto
+                  </button>
+                </div>
+                <img id="photo" alt="Foto yang diambil" style="display: none" />
+              </div>
+            </div>
+          </div>
+          <!-- /stage-upload -->
+
+          <!-- STAGE 2: Koreksi bahan (hidden initially) -->
+          <div class="chef-stage hidden" id="stage-koreksi">
+            <div class="full-section">
+              <div class="full-inner">
+                <div class="sec-label" style="margin-bottom: 20px">
+                  <div class="sec-num">伍</div>
+                  <div class="sec-title">Konfirmasi Bahan</div>
+                </div>
+                <div id="koreksi-area"></div>
+              </div>
+            </div>
+            <button class="btn-back" id="btn-back-upload">
+              ← Kembali Upload
+            </button>
+          </div>
+
+          <!-- STAGE 3: Hasil resep (hidden initially) -->
+          <div class="chef-stage hidden" id="stage-hasil">
+            <div class="full-section">
+              <div class="full-inner">
+                <div class="sec-label" style="margin-bottom: 20px">
+                  <div class="sec-num">陸</div>
+                  <div class="sec-title">Hasil Analisis &amp; Resep</div>
+                </div>
+                <div id="recipes"></div>
+              </div>
+            </div>
+            <div id="results-nav">
+              <button class="btn-back" id="btn-back-koreksi">
+                ← Edit Bahan
+              </button>
+              <button
+                class="btn-back"
+                id="btn-masak-lagi"
+                style="margin-left: 10px"
+              >
+                🍳 Masak Lagi
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- /chef-content-area -->
+      </div>
+      <!-- /page-chef -->
+    </div>
+    <!-- /pages-wrapper -->
+
+    <footer>
+      <div class="footer-bottom">
+        <div class="footer-ornament">— ✦ 智廚坊 ✦ —</div>
+        <div class="footer-saying">
+          食在享受 · Nikmati Setiap Sajian yang Tersaji
+        </div>
+        <p>AI Smart Chef &nbsp;·&nbsp; 谢谢宝贝</p>
+      </div>
+    </footer>
+
+    <div class="frame-bar bottom-bar">
+      <span>✦</span><span>龍</span><span>✦</span><span>鳳</span><span>✦</span>
+      <span>龍</span><span>✦</span><span>鳳</span><span>✦</span><span>龍</span>
+      <span>✦</span><span>鳳</span><span>✦</span>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
