@@ -2,7 +2,8 @@
    智廚坊 Smart Chef — script.js  (fully wired)
 ═══════════════════════════════════════════════════ */
 
-const BACKEND_URL = "http://127.0.0.1:8000";
+const BACKEND_URL =
+  "https://8080-cs-893900410433-default.cs-asia-southeast1-seal.cloudshell.dev/?authuser=3";
 
 /* ══════════════════════════════════════════════════
    SPA PAGE ROUTER
