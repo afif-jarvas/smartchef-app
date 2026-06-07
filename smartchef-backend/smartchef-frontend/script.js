@@ -43,8 +43,26 @@ function goTo(pageId, addToHistory = true) {
   // Show/hide back button
   updateBackButton();
 
-  // Update nav active state
+  // Update desktop nav active state
   navLinks.forEach((btn) => {
+    const isTarget = btn.dataset.page === pageId;
+    btn.classList.toggle("active", isTarget);
+    
+    // SOLUSI GLOBAL FIX: Jika kita sedang tidak di halaman chef, 
+    // pastikan tombol CTA kembali ke style bawaannya dan tidak ikut memerah/membingungkan penanda active.
+    if (btn.classList.contains("nav-cta")) {
+      if (isTarget) {
+        btn.style.backgroundColor = "#b5001f"; // Warna merah penuh saat aktif di panggung Chef
+        btn.style.color = "#fff";
+      } else {
+        btn.style.backgroundColor = ""; // Kembalikan ke style asli style.css jika di halaman lain
+        btn.style.color = "";
+      }
+    }
+  });
+
+  // PERBAIKAN TAMBAHAN: Update mobile menu active state juga agar sinkron luar dalam!
+  mmLinks.forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.page === pageId);
   });
 
