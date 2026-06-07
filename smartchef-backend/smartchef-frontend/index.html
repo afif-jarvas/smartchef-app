@@ -99,35 +99,36 @@
     ══════════════════════════════════════════ -->
     <nav id="navbar">
       <div class="nav-inner">
-        <div class="nav-left-group">
-          <button class="nav-brand" data-page="home">
-            <span class="nb-cjk">智廚坊</span>
-            <span class="nb-sep">·</span>
-            <span class="nb-en">AI SMART CHEF</span>
-          </button>
+        <div class="nav-left-group" style="display: flex; align-items: center; gap: 12px;">
+                <!-- 1. Tombol Kembali sekarang di atas, otomatis jadi yang paling kiri -->
+                <button id="btn-nav-back" aria-label="Kembali" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #cca464; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 0.2s;">
+                    <span class="back-arrow">&lsaquo;</span>
+                    <span>Kembali</span>
+                </button>
 
-          <!-- Back button (shown on non-home pages, sits right next to brand) -->
-          <button id="btn-nav-back" aria-label="Kembali">
-            <span class="back-arrow">&lsaquo;</span>
-            <span>Kembali</span>
-          </button>
-        </div>
+                <!-- 2. Nama Aplikasi mengalah di bawahnya, otomatis bergeser setelah tombol kembali -->
+                <button class="nav-brand" data-page="home" style="background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <span class="nb-cjk" style="color: #cca464; font-weight: bold;">智廚坊</span>
+                    <span class="nb-sep" style="color: rgba(255,255,255,0.3);">·</span>
+                    <span class="nb-en" style="color: #fff; font-size: 14px; letter-spacing: 1px;">AI SMART CHEF</span>
+                </button>
+            </div>
 
         <!-- Desktop links -->
         <div class="nav-links">
-          <button class="nav-link active" data-page="home">
-            <span class="nl-cjk">首</span>
-            <span class="nl-en">Beranda</span>
-          </button>
-          <button class="nav-link" data-page="about">
-            <span class="nl-cjk">關</span>
-            <span class="nl-en">Tentang</span>
-          </button>
-          <button class="nav-link nav-cta" data-page="chef">
-            <span class="nl-cjk">廚</span>
-            <span class="nl-en">Mulai Masak</span>
-          </button>
-        </div>
+            <button class="nav-link" data-page="home">
+                 <span class="nl-cjk">首</span>
+                <span class="nl-en">Beranda</span>
+            </button>
+            <button class="nav-link" data-page="about">
+                <span class="nl-cjk">關</span>
+                <span class="nl-en">Tentang</span>
+            </button>
+            <button class="nav-link" data-page="cook">
+                <span class="nl-cjk">廚</span>
+                 <span class="nl-en">Mulai Masak</span>
+            </button>
+</div>
 
         <!-- Hamburger (mobile) -->
         <button class="nav-hamburger" id="hamburger" aria-label="Menu">

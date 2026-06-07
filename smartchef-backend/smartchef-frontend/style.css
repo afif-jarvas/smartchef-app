@@ -196,9 +196,9 @@ body::before {
 .nav-link:hover {
   background: var(--mist2);
 }
-.nav-link.active {
-  background: var(--mist);
-  border-color: var(--border);
+.nav-link.active, .mm-link.active {
+    background: var(--mist);
+    border-color: var(--border);
 }
 .nl-cjk {
   font-family: "Noto Serif SC", serif;

@@ -28,6 +28,22 @@ function goTo(pageId, addToHistory = true) {
     if (p) p.classList.remove("page-active");
   });
 
+  // -------------------------------------------------------------
+  // LOGIKA BARU: Update warna merah (active) pada tombol navigasi
+  // -------------------------------------------------------------
+  const navLinks = document.querySelectorAll(".nav-link, .mm-link");
+  navLinks.forEach(link => {
+    const pageAttr = link.getAttribute("data-page");
+    
+    // Sinkronisasi status aktif (termasuk handle jika ada perbedaan penamaan 'chef' dan 'cook')
+    if (pageAttr === pageId || (pageId === 'chef' && pageAttr === 'cook') || (pageId === 'cook' && pageAttr === 'chef')) {
+      link.classList.add("active");
+    } else {
+      link.classList.remove("active");
+    }
+  });
+  // -------------------------------------------------------------
+
   // Show target
   if (pages[pageId]) {
     pages[pageId].classList.add("page-active");
@@ -39,7 +55,7 @@ function goTo(pageId, addToHistory = true) {
     pageHistory.push(pageId);
   }
   currentPage = pageId;
-
+}
   // Show/hide back button
   updateBackButton();
 
