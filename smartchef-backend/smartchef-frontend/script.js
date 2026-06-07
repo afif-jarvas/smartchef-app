@@ -28,21 +28,18 @@ function goTo(pageId, addToHistory = true) {
     if (p) p.classList.remove("page-active");
   });
 
-  // -------------------------------------------------------------
-  // LOGIKA BARU: Update warna merah (active) pada tombol navigasi
-  // -------------------------------------------------------------
+  // LOGIKA BARU: Update warna merah (active) pada tombol navigasi desktop & mobile
   const navLinks = document.querySelectorAll(".nav-link, .mm-link");
   navLinks.forEach(link => {
     const pageAttr = link.getAttribute("data-page");
     
-    // Sinkronisasi status aktif (termasuk handle jika ada perbedaan penamaan 'chef' dan 'cook')
+    // Sinkronisasi status aktif (menangani jika ada perbedaan nama halaman 'chef' atau 'cook')
     if (pageAttr === pageId || (pageId === 'chef' && pageAttr === 'cook') || (pageId === 'cook' && pageAttr === 'chef')) {
       link.classList.add("active");
     } else {
       link.classList.remove("active");
     }
   });
-  // -------------------------------------------------------------
 
   // Show target
   if (pages[pageId]) {
