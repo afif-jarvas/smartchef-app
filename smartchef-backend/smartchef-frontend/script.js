@@ -18,6 +18,11 @@ const navLinks = document.querySelectorAll(".nav-link");
 const mmLinks = document.querySelectorAll(".mm-link");
 const btnNavBack = document.getElementById("btn-nav-back");
 
+// 🟩 TAMBAHKAN/TARIK 3 BARIS INI KE ATAS DI SINI:
+const hamburger = document.getElementById("hamburger");
+const mobileMenu = document.getElementById("mobile-menu");
+let isMenuOpen = false;
+
 // Page history stack for back navigation
 const pageHistory = ["home"];
 let currentPage = "home";
@@ -56,16 +61,15 @@ function goTo(pageId, addToHistory = true) {
   // Show/hide back button
   updateBackButton();
 
-  // Close mobile menu (jika dalam mode mobile)
-  if (typeof mobileMenu !== 'undefined' && mobileMenu) {
-    mobileMenu.classList.remove("open");
+//  KODE REVISI BARU:
+  // Close mobile menu secara paksa menggunakan display style & reset hamburger
+  if (mobileMenu) {
+    mobileMenu.style.display = "none"; 
+  }
+  if (hamburger) {
+    hamburger.classList.remove("active");
   }
   isMenuOpen = false;
-
-  // Trigger scroll reveals on newly shown page
-  setTimeout(initScrollReveal, 80);
-}
-
 function updateBackButton() {
   if (!btnNavBack) return;
   if (currentPage !== "home") {
