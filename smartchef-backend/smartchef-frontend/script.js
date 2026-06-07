@@ -18,6 +18,11 @@ const navLinks = document.querySelectorAll(".nav-link");
 const mmLinks = document.querySelectorAll(".mm-link");
 const btnNavBack = document.getElementById("btn-nav-back");
 
+// 🟩 TAMBAHKAN/TARIK 3 BARIS INI KE ATAS DI SINI:
+const hamburger = document.getElementById("hamburger");
+const mobileMenu = document.getElementById("mobile-menu");
+let isMenuOpen = false;
+
 // Page history stack for back navigation
 const pageHistory = ["home"];
 let currentPage = "home";
@@ -28,7 +33,20 @@ function goTo(pageId, addToHistory = true) {
     if (p) p.classList.remove("page-active");
   });
 
-  // Show target
+  // LOGIKA UTAMA: Update penanda active (warna merah/background) pada menu navigasi
+  const allLinks = document.querySelectorAll(".nav-link, .mm-link");
+  allLinks.forEach(link => {
+    const pageAttr = link.getAttribute("data-page");
+    
+    // Sinkronisasi status aktif (handle jika ada perbedaan nama halaman 'chef' atau 'cook')
+    if (pageAttr === pageId || (pageId === 'chef' && pageAttr === 'cook') || (pageId === 'cook' && pageAttr === 'chef')) {
+      link.classList.add("active");
+    } else {
+      link.classList.remove("active");
+    }
+  });
+
+  // Show target page
   if (pages[pageId]) {
     pages[pageId].classList.add("page-active");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -43,19 +61,15 @@ function goTo(pageId, addToHistory = true) {
   // Show/hide back button
   updateBackButton();
 
-  // Update nav active state
-  navLinks.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.page === pageId);
-  });
-
-  // Close mobile menu
-  if (mobileMenu) mobileMenu.classList.remove("open");
+//  KODE REVISI BARU:
+  // Close mobile menu secara paksa menggunakan display style & reset hamburger
+  if (mobileMenu) {
+    mobileMenu.style.display = "none"; 
+  }
+  if (hamburger) {
+    hamburger.classList.remove("active");
+  }
   isMenuOpen = false;
-
-  // Trigger scroll reveals on newly shown page
-  setTimeout(initScrollReveal, 80);
-}
-
 function updateBackButton() {
   if (!btnNavBack) return;
   if (currentPage !== "home") {
