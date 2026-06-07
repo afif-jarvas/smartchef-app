@@ -28,12 +28,12 @@ function goTo(pageId, addToHistory = true) {
     if (p) p.classList.remove("page-active");
   });
 
-  // LOGIKA BARU: Update warna merah (active) pada tombol navigasi desktop & mobile
-  const navLinks = document.querySelectorAll(".nav-link, .mm-link");
-  navLinks.forEach(link => {
+  // LOGIKA UTAMA: Update penanda active (warna merah/background) pada menu navigasi
+  const allLinks = document.querySelectorAll(".nav-link, .mm-link");
+  allLinks.forEach(link => {
     const pageAttr = link.getAttribute("data-page");
     
-    // Sinkronisasi status aktif (menangani jika ada perbedaan nama halaman 'chef' atau 'cook')
+    // Sinkronisasi status aktif (handle jika ada perbedaan nama halaman 'chef' atau 'cook')
     if (pageAttr === pageId || (pageId === 'chef' && pageAttr === 'cook') || (pageId === 'cook' && pageAttr === 'chef')) {
       link.classList.add("active");
     } else {
@@ -41,7 +41,7 @@ function goTo(pageId, addToHistory = true) {
     }
   });
 
-  // Show target
+  // Show target page
   if (pages[pageId]) {
     pages[pageId].classList.add("page-active");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -52,35 +52,14 @@ function goTo(pageId, addToHistory = true) {
     pageHistory.push(pageId);
   }
   currentPage = pageId;
-}
+
   // Show/hide back button
   updateBackButton();
 
-  // Update desktop nav active state
-  navLinks.forEach((btn) => {
-    const isTarget = btn.dataset.page === pageId;
-    btn.classList.toggle("active", isTarget);
-    
-    // SOLUSI GLOBAL FIX: Jika kita sedang tidak di halaman chef, 
-    // pastikan tombol CTA kembali ke style bawaannya dan tidak ikut memerah/membingungkan penanda active.
-    if (btn.classList.contains("nav-cta")) {
-      if (isTarget) {
-        btn.style.backgroundColor = "#b5001f"; // Warna merah penuh saat aktif di panggung Chef
-        btn.style.color = "#fff";
-      } else {
-        btn.style.backgroundColor = ""; // Kembalikan ke style asli style.css jika di halaman lain
-        btn.style.color = "";
-      }
-    }
-  });
-
-  // PERBAIKAN TAMBAHAN: Update mobile menu active state juga agar sinkron luar dalam!
-  mmLinks.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.page === pageId);
-  });
-
-  // Close mobile menu
-  if (mobileMenu) mobileMenu.classList.remove("open");
+  // Close mobile menu (jika dalam mode mobile)
+  if (typeof mobileMenu !== 'undefined' && mobileMenu) {
+    mobileMenu.classList.remove("open");
+  }
   isMenuOpen = false;
 
   // Trigger scroll reveals on newly shown page
